@@ -13,11 +13,13 @@ namespace Grid.Data
 
         public class FunctionalityData
         {
-            public bool canDragSlot = true;
+            public bool canDragSlot;
+            public int activeSlotID;
 
-            public FunctionalityData(bool canDragSlot)
+            public FunctionalityData(bool canDragSlot, int activeSlotID)
             {
                 this.canDragSlot = canDragSlot;
+                this.activeSlotID = activeSlotID;
             }
         }
 

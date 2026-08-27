@@ -186,6 +186,41 @@ MonoBehaviour:
   gridView: {fileID: 33193438}
   slotPref: {fileID: 1798715862}
   slots: []
+--- !u!1 &99139343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99139344}
+  m_Layer: 5
+  m_Name: item-pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &99139344
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99139343}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1798715859}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &134029366
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Grid::Grid.Gameplay.GameController
   gridController: {fileID: 33193439}
   gridInventoryController: {fileID: 530602151}
+  gameplayData: {fileID: 11400000, guid: b4c2202b53da14f5ba8a6fb3911ca7a4, type: 2}
 --- !u!4 &134029368
 Transform:
   m_ObjectHideFlags: 0
@@ -242,6 +278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 324946316}
   - component: {fileID: 324946317}
+  - component: {fileID: 324946318}
   m_Layer: 5
   m_Name: grid-view
   m_TagString: Untagged
@@ -296,6 +333,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
+--- !u!225 &324946318
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324946315}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &335745356
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,12 +441,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1249521847}
+  - {fileID: 1541052442}
   m_Father: {fileID: 324946316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 393.4232, y: -95.37535}
-  m_SizeDelta: {x: 786.8464, y: 190.7507}
+  m_AnchoredPosition: {x: 194.2116, y: -95.37535}
+  m_SizeDelta: {x: 388.4232, y: 190.7507}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &435699149
 MonoBehaviour:
@@ -411,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9465ec5f3a4b546b4fb2c6830ef70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Grid::Grid.View.GridSlotView
-  rootParent: {fileID: 435699148}
+  rootParent: {fileID: 1541052442}
 --- !u!114 &435699150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,6 +666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Grid::Grid.View.GridInventoryView
   horizontalLayout: {fileID: 324946317}
   rootParent: {fileID: 324946316}
+  inventoryContainer: {fileID: 324946318}
 --- !u!114 &530602151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,6 +1502,76 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1541052441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1541052442}
+  m_Layer: 5
+  m_Name: item-pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1541052442
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541052441}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 435699148}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1617094718
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1617094719}
+  m_Layer: 5
+  m_Name: item-pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1617094719
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617094718}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1959774186}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1684418168
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,9 +1628,9 @@ MonoBehaviour:
     m_Bottom: 10
   m_ChildAlignment: 4
   fitter: 1
-  rows: -2147483648
+  rows: 0
   columns: 0
-  cellSize: {x: Infinity, y: 10}
+  cellSize: {x: Infinity, y: Infinity}
   spacing: {x: 10, y: 10}
 --- !u!1 &1798715858
 GameObject:
@@ -1542,6 +1663,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 778154593}
+  - {fileID: 99139344}
   m_Father: {fileID: 1684418169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -1561,7 +1683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9465ec5f3a4b546b4fb2c6830ef70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Grid::Grid.View.GridSlotView
-  rootParent: {fileID: 0}
+  rootParent: {fileID: 99139344}
 --- !u!114 &1798715862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1683,6 +1805,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1173951258}
+  - {fileID: 1617094719}
   - {fileID: 1038723834}
   m_Father: {fileID: 324946316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1703,7 +1826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9465ec5f3a4b546b4fb2c6830ef70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Grid::Grid.View.GridSlotView
-  rootParent: {fileID: 0}
+  rootParent: {fileID: 1617094719}
 --- !u!114 &1959774188
 MonoBehaviour:
   m_ObjectHideFlags: 0

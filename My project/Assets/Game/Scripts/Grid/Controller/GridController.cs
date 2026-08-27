@@ -23,7 +23,8 @@ namespace Grid.Controller
                     onDragBegin: slotDragBegin,
                     onDragEnd: slotDragEnd,
                     functionalityData: new FunctionalityData(
-                        canDragSlot: false
+                        canDragSlot: false,
+                        activeSlotID: -1
                     )
                 ),
                 createdSlots: out slots 

@@ -32,7 +32,8 @@ namespace Grid.Controller
                     onDragBegin: slotDragBegin,
                     onDragEnd: slotDragEnd,
                     functionalityData: new FunctionalityData(
-                        canDragSlot: true
+                        canDragSlot: false,
+                        activeSlotID: data.inventorySize - 1
                     ),
                     inventorySize: data.inventorySize
                 ),
@@ -50,6 +51,7 @@ namespace Grid.Controller
         #region Functionality
         public void PushSlotItemToQueue(GridItemController item)
         {
+            int pos = freeSlots - 1;
             gridInventoryView.PushSlotItem(slots[new Vector2(0,freeSlots-1)], item);
             freeSlots--;
         }
@@ -58,6 +60,11 @@ namespace Grid.Controller
         {
             //gridInventoryView.PopSlotItem(slots[new Vector2(0, freeSlots - 1)]);
             freeSlots++;
+        }
+
+        public void SetInteractivity(bool interactive)
+        {
+            gridInventoryView.SetInteractivity(interactive);
         }
         #endregion
 

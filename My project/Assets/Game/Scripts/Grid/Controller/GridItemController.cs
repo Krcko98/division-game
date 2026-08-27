@@ -11,8 +11,14 @@ namespace Grid.Controller
         public void Init(GridItemControllerData data)
         {
             itemView.Init(new GridItemViewData(
-                parent: data.parent
+                parent: data.parent,
+                itemData: data.itemData
             ));
+        }
+
+        public void SetParent(RectTransform parent)
+        {
+            itemView.SetParent(parent);
         }
     }
 }

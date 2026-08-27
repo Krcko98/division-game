@@ -10,13 +10,21 @@ namespace Grid.Gameplay
     {
         [SerializeField] private GridController gridController;
         [SerializeField] private GridInventoryController gridInventoryController;
+        [SerializeField] private GameplayDataSO gameplayData;
+
+        public static GameController Instance = null;
 
         private GameStateFSM gameFSM;
         private GameplayFSM gameplayFSM;
 
+        public GameplayDataSO GameplayData { get => gameplayData; }
+
         private void Awake()
         {
-
+            if(Instance == null)
+            {
+                Instance = this;
+            }
         }
 
         private void Start()

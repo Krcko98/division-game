@@ -14,6 +14,7 @@ namespace Grid.View
     {
         [SerializeField] private HorizontalLayoutGroup horizontalLayout;
         [SerializeField] private RectTransform rootParent;
+        [SerializeField] private CanvasGroup inventoryContainer;
 
         private GridSlotController slotPref;
         private GridSlotKeepController slotKeepPref;
@@ -85,6 +86,11 @@ namespace Grid.View
         public void PushSlotItem(GridSlotController slot, GridItemController item)
         {
             slot.AttachItem(item);
+        }
+
+        public void SetInteractivity(bool interactive)
+        {
+            inventoryContainer.interactable = interactive;
         }
         #endregion
     }

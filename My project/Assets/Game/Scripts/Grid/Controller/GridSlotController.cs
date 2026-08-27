@@ -1,4 +1,5 @@
 using Grid.Data;
+using Grid.Data.Item;
 using Grid.Static;
 using Grid.View;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace Grid.Controller
         [SerializeField] private Vector2 pos;
         [SerializeField] private GridItemController attachedItem;
 
-        [SerializeField] private FunctionalityData functionalityData;
+        private bool canDrag;
 
         private event EventDelegates.OnSlotDragBeginDelegate onSlotDragBegin;
         private event EventDelegates.OnSlotDragEndDelegate onSlotDragEnd;
@@ -27,7 +28,10 @@ namespace Grid.Controller
         public virtual void Init(GridSlotControllerData data)
         {
             pos = data.pos;
-            functionalityData = data.functionalityData;
+            canDrag = 
+                data.functionalityData.activeSlotID == pos.y ? 
+                true : 
+                data.functionalityData.canDragSlot;
 
             onSlotDragBegin = data.onSlotDragBegin;
             onSlotDragEnd = data.onSlotDragEnd;
@@ -40,9 +44,7 @@ namespace Grid.Controller
         public void AttachItem(GridItemController item)
         {
             attachedItem = item;
-            item.Init(new GridItemControllerData(
-                parent: slotView.RootParent
-            ));
+            item.SetParent(slotView.RootParent);
         }
 
         private void OnDisable()
@@ -53,21 +55,21 @@ namespace Grid.Controller
         #region Drag
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!functionalityData.canDragSlot) return;
+            if (!canDrag) return;
 
             onSlotDragBegin?.Invoke(this);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!functionalityData.canDragSlot) return;
+            if (!canDrag) return;
 
             onSlotDragEnd?.Invoke(this);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!functionalityData.canDragSlot) return;
+            if (!canDrag) return;
 
 
         }
