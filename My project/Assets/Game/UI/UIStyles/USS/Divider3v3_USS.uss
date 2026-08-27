@@ -1,0 +1,23 @@
+:root {
+}
+
+.root-base {
+}
+
+.number-container {
+}
+
+.grid-container {
+    height: 75%;
+}
+
+.grid {
+    flex-shrink: 0.455;
+}
+
+.number-slot {
+}
+
+.number-slot_bg {
+    --bg_col: rgb(0, 0, 0);
+}
