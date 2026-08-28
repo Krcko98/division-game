@@ -9,6 +9,7 @@ namespace Grid.Data
         public Vector2 pos;
         public EventDelegates.OnSlotDragBeginDelegate onSlotDragBegin;
         public EventDelegates.OnSlotDragEndDelegate onSlotDragEnd;
+        public EventDelegates.OnSlotDragDelegate onSlotDrag;
         public FunctionalityData functionalityData;
 
         public class FunctionalityData
@@ -28,6 +29,7 @@ namespace Grid.Data
             Vector2 pos, 
             EventDelegates.OnSlotDragEndDelegate onSlotDragEnd, 
             EventDelegates.OnSlotDragBeginDelegate onSlotDragBegin,
+            EventDelegates.OnSlotDragDelegate onSlotDrag,
             FunctionalityData functionalityData
         )
         {
@@ -35,6 +37,7 @@ namespace Grid.Data
             this.pos = pos;
             this.onSlotDragEnd = onSlotDragEnd;
             this.onSlotDragBegin = onSlotDragBegin;
+            this.onSlotDrag = onSlotDrag;
             this.functionalityData = functionalityData;
         }
     }

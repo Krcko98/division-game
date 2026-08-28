@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GameplayDataSO
   m_EditorClassIdentifier: Grid::GameplayDataSO
   inventoryLoadPushDelay: 0.4
+  draggedItemSize: {x: 250, y: 250}

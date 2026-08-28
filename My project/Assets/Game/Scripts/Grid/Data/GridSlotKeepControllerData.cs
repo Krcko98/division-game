@@ -12,6 +12,7 @@ namespace Grid.Data
             pos: gridSlotControllerData.pos,
             onSlotDragEnd: gridSlotControllerData.onSlotDragEnd,
             onSlotDragBegin: gridSlotControllerData.onSlotDragBegin,
+            onSlotDrag: gridSlotControllerData.onSlotDrag,
             functionalityData: gridSlotControllerData.functionalityData
         )
         {

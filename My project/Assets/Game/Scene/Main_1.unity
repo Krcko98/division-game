@@ -252,6 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Grid::Grid.Gameplay.GameController
   gridController: {fileID: 33193439}
   gridInventoryController: {fileID: 530602151}
+  mainCanvas: {fileID: 1458150234}
   gameplayData: {fileID: 11400000, guid: b4c2202b53da14f5ba8a6fb3911ca7a4, type: 2}
 --- !u!4 &134029368
 Transform:

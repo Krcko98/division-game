@@ -3,6 +3,7 @@ using Grid.Static;
 using Grid.View;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static Grid.Data.GridSlotControllerData;
 
 namespace Grid.Controller
@@ -22,6 +23,7 @@ namespace Grid.Controller
                     slotPref: slotPref,
                     onDragBegin: slotDragBegin,
                     onDragEnd: slotDragEnd,
+                    onDrag: slotDrag,
                     functionalityData: new FunctionalityData(
                         canDragSlot: false,
                         activeSlotID: -1
@@ -31,12 +33,17 @@ namespace Grid.Controller
             );
         }
 
-        private void slotDragBegin(GridSlotController slot)
+        private void slotDragBegin(GridSlotController slot, PointerEventData eventData)
         {
             
         }
 
-        private void slotDragEnd(GridSlotController slot)
+        private void slotDragEnd(GridSlotController slot, PointerEventData eventData)
+        {
+
+        }
+
+        private void slotDrag(GridSlotController slot, PointerEventData eventData)
         {
 
         }

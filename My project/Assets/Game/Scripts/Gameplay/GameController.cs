@@ -3,6 +3,7 @@ using UnityEngine;
 using Grid.Data;
 using Grid.Gameplay.Data;
 using Grid.Factory;
+using Grid.Static;
 
 namespace Grid.Gameplay
 {
@@ -10,6 +11,7 @@ namespace Grid.Gameplay
     {
         [SerializeField] private GridController gridController;
         [SerializeField] private GridInventoryController gridInventoryController;
+        [SerializeField] private Canvas mainCanvas;
         [SerializeField] private GameplayDataSO gameplayData;
 
         public static GameController Instance = null;
@@ -18,6 +20,7 @@ namespace Grid.Gameplay
         private GameplayFSM gameplayFSM;
 
         public GameplayDataSO GameplayData { get => gameplayData; }
+        public Canvas MainCanvas { get => mainCanvas; }
 
         private void Awake()
         {
@@ -61,6 +64,7 @@ namespace Grid.Gameplay
         private void OnDisable()
         {
             GridFactory.UnloadAllResources();
+            GlobalEventBus.RemoveSubscriptions();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Grid.Data
         public GridSlotKeepController slotKeepPref;
         public EventDelegates.OnSlotDragBeginDelegate onDragBegin;
         public EventDelegates.OnSlotDragEndDelegate onDragEnd;
+        public EventDelegates.OnSlotDragDelegate onDrag;
         public FunctionalityData functionalityData;
 
         public int inventorySize;
@@ -21,6 +22,7 @@ namespace Grid.Data
             GridSlotKeepController slotKeepPref,
             EventDelegates.OnSlotDragBeginDelegate onDragBegin, 
             EventDelegates.OnSlotDragEndDelegate onDragEnd,
+            EventDelegates.OnSlotDragDelegate onDrag,
             FunctionalityData functionalityData,
             int inventorySize
         )
@@ -29,6 +31,7 @@ namespace Grid.Data
             this.slotKeepPref = slotKeepPref;
             this.onDragBegin = onDragBegin;
             this.onDragEnd = onDragEnd;
+            this.onDrag = onDrag;
             this.functionalityData = functionalityData;
             this.inventorySize = inventorySize;
         }

@@ -85,6 +85,11 @@ namespace Grid.Factory
             return item;
         }
 
+        public static void DespawnGridItem(GridItemController item)
+        {
+            Object.Destroy(item.gameObject);
+        }
+
         public static string MergeObjectID(string idBase, int id)
         {
             return string.Format("{0}{1}", idBase, id);

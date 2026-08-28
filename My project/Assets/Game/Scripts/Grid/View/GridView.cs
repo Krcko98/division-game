@@ -24,10 +24,11 @@ namespace Grid.View
             slotPref = data.slotPref;
 
             createGrid(
-                out createdSlots, 
-                data.onDragBegin, 
-                data.onDragEnd,
-                data.functionalityData
+                createdSlots: out createdSlots, 
+                onDragBeginCallback: data.onDragBegin, 
+                onDragEndCallback: data.onDragEnd,
+                onDragCallback: data.onDrag,
+                functionalityData: data.functionalityData
             );
         }
 
@@ -35,6 +36,7 @@ namespace Grid.View
             out List<GridSlotController> createdSlots, 
             EventDelegates.OnSlotDragBeginDelegate onDragBeginCallback, 
             EventDelegates.OnSlotDragEndDelegate onDragEndCallback,
+            EventDelegates.OnSlotDragDelegate onDragCallback,
             FunctionalityData functionalityData
         )
         {
@@ -52,6 +54,7 @@ namespace Grid.View
                         pos: new Vector2(i,j),
                         onSlotDragEnd: onDragEndCallback,
                         onSlotDragBegin: onDragBeginCallback,
+                        onSlotDrag: onDragCallback,
                         functionalityData: functionalityData
                     ));
 

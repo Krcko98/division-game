@@ -33,5 +33,15 @@ namespace Grid.View
             rect.sizeDelta = parent.sizeDelta;
             rect.anchoredPosition = Vector3.zero;
         }
+
+        public void SetAbsolutePosition(Vector2 pos)
+        {
+            rect.transform.position = pos;
+        }
+
+        public void SetSize(Vector2 size)
+        {
+            rect.sizeDelta = size;
+        }
     }
 }

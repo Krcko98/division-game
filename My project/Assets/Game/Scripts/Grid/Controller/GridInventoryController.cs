@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Grid.Data.GridSlotControllerData;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace Grid.Controller
 {
@@ -31,6 +32,7 @@ namespace Grid.Controller
                     slotKeepPref: slotKeepPref,
                     onDragBegin: slotDragBegin,
                     onDragEnd: slotDragEnd,
+                    onDrag: slotDrag,
                     functionalityData: new FunctionalityData(
                         canDragSlot: false,
                         activeSlotID: data.inventorySize - 1
@@ -73,14 +75,20 @@ namespace Grid.Controller
         #endregion
 
         #region SlotDrag
-        private void slotDragBegin(GridSlotController slot)
+        private void slotDragBegin(GridSlotController slot, PointerEventData eventData)
         {
-            GlobalEventBus.OnSlotInventoryDragBegin?.Invoke(slot);
+            Debug.Log("drag");
+            GlobalEventBus.OnSlotInventoryDragBegin?.Invoke(slot, eventData);
         }
 
-        private void slotDragEnd(GridSlotController slot)
+        private void slotDragEnd(GridSlotController slot, PointerEventData eventData)
         {
-            GlobalEventBus.OnSlotInventoryDragEnd?.Invoke(slot);
+            GlobalEventBus.OnSlotInventoryDragEnd?.Invoke(slot, eventData);
+        }
+
+        private void slotDrag(GridSlotController slot, PointerEventData eventData)
+        {
+            GlobalEventBus.OnSlotInventoryDrag?.Invoke(slot, eventData);
         }
         #endregion
     }

@@ -19,6 +19,7 @@ namespace Grid.Controller
 
         private event EventDelegates.OnSlotDragBeginDelegate onSlotDragBegin;
         private event EventDelegates.OnSlotDragEndDelegate onSlotDragEnd;
+        private event EventDelegates.OnSlotDragDelegate onSlotDrag;
 
         public Vector2 Pos { get => pos; }
         public GridItemController AttachedItem { get => attachedItem; }
@@ -35,6 +36,7 @@ namespace Grid.Controller
 
             onSlotDragBegin = data.onSlotDragBegin;
             onSlotDragEnd = data.onSlotDragEnd;
+            onSlotDrag = data.onSlotDrag;
 
             slotView.Init(new GridSlotViewData(
                 parent: data.parent
@@ -57,21 +59,21 @@ namespace Grid.Controller
         {
             if (!canDrag) return;
 
-            onSlotDragBegin?.Invoke(this);
+            onSlotDragBegin?.Invoke(this, eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             if (!canDrag) return;
 
-            onSlotDragEnd?.Invoke(this);
+            onSlotDragEnd?.Invoke(this, eventData);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
             if (!canDrag) return;
 
-
+            onSlotDrag?.Invoke(this, eventData);
         }
         #endregion
     }

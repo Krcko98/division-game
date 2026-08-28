@@ -34,7 +34,11 @@ namespace Grid.Gameplay.States
                 pushItems(
                     delay: GameController.Instance.GameplayData.InventoryLoadPushDelay, 
                     amount: 3,
-                    () => fsm.inventoryController.SetInteractivity(true)
+                    () => {
+                        fsm.inventoryController.SetInteractivity(true);
+
+                        fsm.ChangeState(GameplayFSM.openState);
+                    }
                 )
             );
         }

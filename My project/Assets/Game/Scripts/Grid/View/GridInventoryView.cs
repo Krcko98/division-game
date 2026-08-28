@@ -28,11 +28,12 @@ namespace Grid.View
             slotKeepPref = data.slotKeepPref;
 
             createGrid(
-                out createdSlots,
-                data.onDragBegin, 
-                data.onDragEnd,
-                data.functionalityData,
-                data.inventorySize
+                createdSlots: out createdSlots,
+                onDragBeginCallback: data.onDragBegin, 
+                onDragEndCallback: data.onDragEnd,
+                functionalityData: data.functionalityData,
+                onDragCallback: data.onDrag,
+                size: data.inventorySize
             );
         }
 
@@ -40,6 +41,7 @@ namespace Grid.View
             out List<GridSlotController> createdSlots,
             EventDelegates.OnSlotDragBeginDelegate onDragBeginCallback,
             EventDelegates.OnSlotDragEndDelegate onDragEndCallback,
+            EventDelegates.OnSlotDragDelegate onDragCallback,
             FunctionalityData functionalityData,
             int size
         )
@@ -57,6 +59,7 @@ namespace Grid.View
                     pos: new Vector2(0, i),
                     onSlotDragEnd: onDragEndCallback,
                     onSlotDragBegin: onDragBeginCallback,
+                    onSlotDrag: onDragCallback,
                     functionalityData: functionalityData
                 ));
 
@@ -73,6 +76,7 @@ namespace Grid.View
                     pos: new Vector2(0, size),
                     onSlotDragEnd: onDragEndCallback,
                     onSlotDragBegin: onDragBeginCallback,
+                    onSlotDrag: onDragCallback,
                     functionalityData: functionalityData
                 )
             ));
@@ -91,6 +95,7 @@ namespace Grid.View
         public void SetInteractivity(bool interactive)
         {
             inventoryContainer.interactable = interactive;
+            inventoryContainer.blocksRaycasts = interactive;
         }
         #endregion
     }
