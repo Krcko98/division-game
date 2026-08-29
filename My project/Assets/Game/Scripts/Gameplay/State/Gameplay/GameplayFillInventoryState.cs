@@ -62,7 +62,8 @@ namespace Grid.Gameplay.States
                 parent: null,
                 itemData: new GridItemData(
                     number: num,
-                    color: GridItemHelper.FetchColor(num)
+                    color: GridItemHelper.FetchColor(num),
+                    itemData: GameController.Instance.GameplayData.InventoryItemData
                 )
             ));
 

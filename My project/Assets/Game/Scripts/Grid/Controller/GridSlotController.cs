@@ -49,6 +49,11 @@ namespace Grid.Controller
             item.SetParent(slotView.RootParent);
         }
 
+        public void Select(bool select)
+        {
+            slotView.SelectOutline(select);
+        }
+
         private void OnDisable()
         {
 

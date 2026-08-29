@@ -77,7 +77,6 @@ namespace Grid.Controller
         #region SlotDrag
         private void slotDragBegin(GridSlotController slot, PointerEventData eventData)
         {
-            Debug.Log("drag");
             GlobalEventBus.OnSlotInventoryDragBegin?.Invoke(slot, eventData);
         }
 

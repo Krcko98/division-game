@@ -17,6 +17,21 @@ namespace Grid.Gameplay.States
 
         private GridSlotController draggingSlot = null;
         private GridItemController spawnedItem = null;
+        private string spawnedItemKey = "spawnedItem";
+        private string draggingSlotKey = "draggingSlot";
+
+        private RescaleData draggedSlotRescaleData = new RescaleData(
+            rescaleFromSize: Vector3.one,
+            rescaleToSize: Vector3.zero,
+            startDelay: 0,
+            duration: 0.3f
+        );
+        private RescaleData draggedItemRescaleData = new RescaleData(
+            rescaleFromSize: Vector3.zero,
+            rescaleToSize: Vector3.one,
+            startDelay: 0,
+            duration: 0.5f
+        );
 
         private int spawnableItemID = 1;
 
@@ -32,8 +47,6 @@ namespace Grid.Gameplay.States
             base.Enter();
             
             GlobalEventBus.OnSlotInventoryDragBegin += OnDragBegin;
-            GlobalEventBus.OnSlotInventoryDragEnd += OnDragEnd;
-            GlobalEventBus.OnSlotInventoryDrag += OnDrag;
         }
 
         public override void Update()
@@ -45,28 +58,43 @@ namespace Grid.Gameplay.States
         {
             base.Exit();
 
+            draggingSlot = null;
+            spawnedItem = null;
+
             removeListeners();
         }
 
         private void removeListeners()
         {
             GlobalEventBus.OnSlotInventoryDragBegin -= OnDragBegin;
-            GlobalEventBus.OnSlotInventoryDragEnd -= OnDragEnd;
-            GlobalEventBus.OnSlotInventoryDrag -= OnDrag;
         }
 
         #region Event
         private void OnDragBegin(GridSlotController slot, PointerEventData eventData)
         {
-            draggingSlot = slot;
-            Debug.Log(slot);
+            if(draggingSlot != null) return;
 
+            draggingSlot = slot;
+
+            if(!fsm.data.TryAdd(draggingSlotKey, draggingSlot))
+            {
+                fsm.data[draggingSlotKey] = draggingSlot;
+            }
+
+            //Start all needed effects on the slot that we started dragging on
+            slot.AttachedItem.Rescale(
+                draggedSlotRescaleData
+            );
+
+            //Create and setup new draggable item that has free movement.
+            //We will use this item to manipulate across states easily with fsm.data
             GridItemController item = GridFactory.CreateGridItem(spawnableItemID);
             item.Init(new GridItemControllerData(
                 parent: null,
                 new GridItemData(
-                    draggingSlot.AttachedItem.ItemData.number,
-                    draggingSlot.AttachedItem.ItemData.color
+                    number: draggingSlot.AttachedItem.ItemData.number,
+                    color: draggingSlot.AttachedItem.ItemData.color,
+                    itemData: GameController.Instance.GameplayData.DragItemData
                 )
             ));
 
@@ -74,22 +102,19 @@ namespace Grid.Gameplay.States
             item.SetSize(GameController.Instance.GameplayData.DraggedItemSize);
             item.SetAbsolutePosition(CanvasHelper.ClickPointToCanvasPoint(GameController.Instance.MainCanvas, eventData));
 
+            //Start all needed effects on the spawned item, after we set parent and all init data
+            item.Rescale(
+                draggedItemRescaleData
+            );
+
             spawnedItem = item;
-        }
 
-        private void OnDrag(GridSlotController slot, PointerEventData eventData)
-        {
-            if(draggingSlot != slot) return;
+            if(!fsm.data.TryAdd(spawnedItemKey, spawnedItem))
+            {
+                fsm.data[spawnedItemKey] = spawnedItem;
+            }
 
-            spawnedItem.SetAbsolutePosition(CanvasHelper.ClickPointToCanvasPoint(GameController.Instance.MainCanvas, eventData));
-        }
-
-        private void OnDragEnd(GridSlotController slot, PointerEventData eventData)
-        {
-            GridFactory.DespawnGridItem(spawnedItem);
-
-            spawnedItem = null;
-            draggingSlot = null;
+            fsm.ChangeState(GameplayFSM.dragState);
         }
         #endregion
     }

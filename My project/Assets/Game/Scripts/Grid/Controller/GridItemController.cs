@@ -1,3 +1,4 @@
+using System;
 using Grid.Data;
 using Grid.Data.Item;
 using Grid.View;
@@ -9,7 +10,6 @@ namespace Grid.Controller
     {
         [SerializeField] private GridItemView itemView;
         private GridItemData itemData;
-
         public GridItemData ItemData { get => itemData; }
 
         public void Init(GridItemControllerData data)
@@ -35,6 +35,11 @@ namespace Grid.Controller
         public void SetAbsolutePosition(Vector2 pos)
         {
             itemView.SetAbsolutePosition(pos);
+        }
+
+        public void Rescale(RescaleData data, Action finishedRescaleCallback = null)
+        {
+            itemView.Rescale(data, finishedRescaleCallback);
         }
     }
 }

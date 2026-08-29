@@ -1,3 +1,7 @@
+using System;
+using CorTasks.CoroutineExtension;
+using CorTasks.CoroutineExtension.Presets;
+using DG.Tweening;
 using Grid.Data;
 using Grid.Data.Item;
 using TMPro;
@@ -32,6 +36,14 @@ namespace Grid.View
             transform.localScale = Vector3.one;
             rect.sizeDelta = parent.sizeDelta;
             rect.anchoredPosition = Vector3.zero;
+            
+            if(itemData.itemData.Use)
+            {
+                rect.transform.DOPunchScale(
+                    duration: itemData.itemData.AttachPunchDuration,
+                    punch: itemData.itemData.AttachPunchScale
+                );
+            }
         }
 
         public void SetAbsolutePosition(Vector2 pos)
@@ -42,6 +54,37 @@ namespace Grid.View
         public void SetSize(Vector2 size)
         {
             rect.sizeDelta = size;
+        }
+
+        public void Rescale(RescaleData data, Action finishedRescaleCallback = null)
+        {
+            //rect.transform.DOComplete();
+
+            rect.transform.localScale = data.rescaleFromSize;
+
+            new Task(TaskPresets.DelayForSeconds(
+                seconds: data.startDelay,
+                callback: () =>
+                {
+                    if(rect == null) return;
+
+                    if(finishedRescaleCallback == null)
+                    {
+                        rect.transform.DOScale(
+                            endValue: data.rescaleToSize, 
+                            duration: data.duration
+                        );
+                    }
+                    else
+                    {
+                        TweenCallback tweenCallback = new TweenCallback(finishedRescaleCallback);
+                        rect.transform.DOScale(
+                            endValue: data.rescaleToSize, 
+                            duration: data.duration
+                        ).onComplete = tweenCallback;
+                    }
+                }
+            ));
         }
     }
 }

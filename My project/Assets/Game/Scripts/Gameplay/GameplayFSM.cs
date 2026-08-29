@@ -1,3 +1,4 @@
+using System;
 using Grid.Controller;
 using Grid.Gameplay.Data;
 using Grid.Gameplay.States;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 namespace Grid.Gameplay
 {
+    [Serializable]
     public class GameplayFSM : StateMachine
     {
         public static readonly string openState = "open_ready";
@@ -27,6 +29,7 @@ namespace Grid.Gameplay
         {
             states[inventoryFillState] = new GameplayFillInventoryState();
             states[openState] = new GameplayOpenState();
+            states[dragState] = new GameplayDragState();
 
             base.Init(defaultState);
 
