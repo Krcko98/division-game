@@ -1,5 +1,7 @@
+using System;
 using Grid.Data;
 using Grid.Data.Item;
+using Grid.Factory;
 using Grid.Static;
 using Grid.View;
 using UnityEngine;
@@ -47,6 +49,25 @@ namespace Grid.Controller
         {
             attachedItem = item;
             item.SetParent(slotView.RootParent);
+        }
+
+        public void DetachItem(RescaleData data, Action<GridSlotController> callback = null)
+        {
+            if(attachedItem == null) 
+            {
+                callback?.Invoke(null);
+                return;
+            }
+
+            attachedItem.Rescale(
+                data,
+                (GridItemController item) => 
+                {
+                    GridFactory.DespawnGridItem(item);     
+
+                    callback?.Invoke(this);
+                }
+            );
         }
 
         public void Select(bool select)

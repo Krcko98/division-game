@@ -1,8 +1,10 @@
 using Grid.Controller;
 using Grid.Data;
+using Grid.Data.Item;
 using Grid.Factory;
 using Grid.Layout;
 using Grid.Static;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -87,9 +89,19 @@ namespace Grid.View
         }
 
         #region Functionality
-        public void PushSlotItem(GridSlotController slot, GridItemController item)
+        public void AttachItem(GridSlotController slot, GridItemController item)
         {
             slot.AttachItem(item);
+        }
+
+        public void DetachItem(GridSlotController slot, RescaleData data, Action<GridSlotController> detachCallback = null)
+        {
+            GridFactory.DespawnGridItem(slot.AttachedItem);
+
+            slot.DetachItem(
+                data: data,
+                callback: detachCallback
+            );
         }
 
         public void SetInteractivity(bool interactive)

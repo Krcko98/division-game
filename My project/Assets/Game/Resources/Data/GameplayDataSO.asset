@@ -16,3 +16,4 @@ MonoBehaviour:
   draggedItemSize: {x: 250, y: 250}
   inventoryItemData: {fileID: 11400000, guid: 3cff44cd18f934d40b68f01d72d4d331, type: 2}
   dragItemData: {fileID: 11400000, guid: 9190679d8e71844a3bb943e4ec9fbef2, type: 2}
+  dragAttachItemData: {fileID: 11400000, guid: 61f8b040a11e54fda9e7ef9420d33173, type: 2}

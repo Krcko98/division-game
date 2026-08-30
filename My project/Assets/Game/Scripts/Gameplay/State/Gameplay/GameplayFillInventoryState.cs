@@ -53,7 +53,7 @@ namespace Grid.Gameplay.States
             base.Exit();
         }
 
-        private void pushItem()
+        private void pushItem(Action pushedCallback = null)
         {
             int num = GameplayHelper.FetchRandomNumber();
 
@@ -67,7 +67,7 @@ namespace Grid.Gameplay.States
                 )
             ));
 
-            fsm.inventoryController.PushSlotItemToQueue(item);
+            fsm.inventoryController.PushSlotItemToQueue(item, pushedCallback);
         }
 
         #region Wait
@@ -80,6 +80,8 @@ namespace Grid.Gameplay.States
                 yield return new WaitForSeconds(delay);
 
                 pushItem();
+
+                yield return new WaitUntil(callback);
 
                 i--;
             }

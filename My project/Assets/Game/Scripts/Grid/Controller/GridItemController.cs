@@ -37,9 +37,9 @@ namespace Grid.Controller
             itemView.SetAbsolutePosition(pos);
         }
 
-        public void Rescale(RescaleData data, Action finishedRescaleCallback = null)
+        public void Rescale(RescaleData data, Action<GridItemController> finishedRescaleCallback = null)
         {
-            itemView.Rescale(data, finishedRescaleCallback);
+            itemView.Rescale(data, () => finishedRescaleCallback(this));
         }
     }
 }

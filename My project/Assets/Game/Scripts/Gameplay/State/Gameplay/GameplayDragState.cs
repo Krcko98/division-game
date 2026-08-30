@@ -3,6 +3,7 @@ using Grid.Controller.Slot;
 using Grid.Data;
 using Grid.Data.Item;
 using Grid.Factory;
+using Grid.Gameplay.Rules.Data;
 using Grid.Static;
 using Grid.Static.Helper;
 using SM;
@@ -36,6 +37,20 @@ namespace Grid.Gameplay.States
             rescaleToSize: Vector3.zero,
             startDelay: 0,
             duration: 0.2f
+        );
+
+        private RescaleData slotAttachRescaleData = new RescaleData(
+            rescaleFromSize: Vector3.zero,
+            rescaleToSize: Vector3.one,
+            startDelay: 0,
+            duration: 0.3f
+        );
+
+        private RescaleData slotDetachRescaleData = new RescaleData(
+            rescaleFromSize: Vector3.one,
+            rescaleToSize: Vector3.zero,
+            startDelay: 0,
+            duration: 0.3f
         );
 
         public override void Init(StateMachine sm)
@@ -95,9 +110,37 @@ namespace Grid.Gameplay.States
 
             deselectSlots();
 
+            //Our pointer is over slot that is selected
             if(slotHover != null)
             {
-                
+                //If item is not already on the selected slot we will create a new item
+                //Otherwise, we just continue
+                if(slotHover.AttachedItem == null)
+                {
+                    int num = spawnedItem.ItemData.number;
+
+                    GridItemController item = GridFactory.CreateGridItem(0);
+                    item.Init(new GridItemControllerData(
+                        parent: null,
+                        itemData: new GridItemData(
+                            number: num,
+                            color: GridItemHelper.FetchColor(num),
+                            itemData: GameController.Instance.GameplayData.DragAttachItemData
+                        )
+                    ));
+
+                    slotHover.AttachItem(item);
+                    slotHover.AttachedItem.Rescale(
+                        slotAttachRescaleData
+                    );
+
+                    GameController.Instance.GameRules.InsertItem(new PosValue(
+                        pos: new Vector2Int((int)slotHover.Pos.x, (int)slotHover.Pos.y),
+                        value: num
+                    ));
+
+                    fsm.inventoryController.PopItemInSlotFromQueue(slotDetachRescaleData);
+                }
             }
 
             draggingSlot.AttachedItem.Rescale(
@@ -106,9 +149,9 @@ namespace Grid.Gameplay.States
 
             spawnedItem.Rescale(
                 draggedItemRescaleData,
-                () => 
+                (GridItemController item) => 
                 {
-                    GridFactory.DespawnGridItem(spawnedItem);
+                    GridFactory.DespawnGridItem(item);
 
                     spawnedItem = null;
                     draggingSlot = null;

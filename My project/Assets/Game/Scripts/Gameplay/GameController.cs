@@ -4,6 +4,7 @@ using Grid.Data;
 using Grid.Gameplay.Data;
 using Grid.Factory;
 using Grid.Static;
+using Grid.Gameplay.Rules;
 
 namespace Grid.Gameplay
 {
@@ -13,6 +14,7 @@ namespace Grid.Gameplay
         [SerializeField] private GridInventoryController gridInventoryController;
         [SerializeField] private Canvas mainCanvas;
         [SerializeField] private GameplayDataSO gameplayData;
+        [SerializeField] private GameRulesController gameRules = new GameRulesController();
 
         public static GameController Instance = null;
 
@@ -21,6 +23,7 @@ namespace Grid.Gameplay
 
         public GameplayDataSO GameplayData { get => gameplayData; }
         public Canvas MainCanvas { get => mainCanvas; }
+        public GameRulesController GameRules { get => gameRules; }
 
         private void Awake()
         {
@@ -38,6 +41,7 @@ namespace Grid.Gameplay
         public void Init()
         {
             GridFactory.LoadAllResources();
+            gameRules.Init();
 
             gridController.Init(new GridControllerData());
             gridInventoryController.Init(new GridInventoryControllerData(
@@ -57,7 +61,6 @@ namespace Grid.Gameplay
                     inventoryController: gridInventoryController
                 )
             );
-
             gameplayFSM.Init();
         }
 
