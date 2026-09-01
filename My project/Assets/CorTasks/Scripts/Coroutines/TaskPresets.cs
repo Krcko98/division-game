@@ -64,10 +64,7 @@ namespace CorTasks.CoroutineExtension.Presets
             
             yield return waitSeconds;
 
-            if (callback != null)
-            {
-                callback();
-            }
+            callback?.Invoke();
         }
     }
 }

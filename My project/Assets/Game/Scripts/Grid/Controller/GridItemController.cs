@@ -39,7 +39,7 @@ namespace Grid.Controller
 
         public void Rescale(RescaleData data, Action<GridItemController> finishedRescaleCallback = null)
         {
-            itemView.Rescale(data, () => finishedRescaleCallback(this));
+            itemView.Rescale(data, () => finishedRescaleCallback?.Invoke(this));
         }
     }
 }

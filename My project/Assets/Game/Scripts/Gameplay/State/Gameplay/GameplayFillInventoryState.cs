@@ -83,8 +83,8 @@ namespace Grid.Gameplay.States
                 callback += waitForPush.Invoke;
                 yield return new WaitUntil(() => pushFinished);
                 yield return new WaitForSeconds(delay);
-
                 callback -= waitForPush.Invoke;
+                
                 pushFinished = false;
 
                 i--;
