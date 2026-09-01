@@ -84,5 +84,10 @@ namespace Grid.View
                 }
             ));
         }
+
+        public void CompleteTweens()
+        {
+            rect.transform.DOComplete();
+        }
     }
 }

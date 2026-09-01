@@ -1,3 +1,6 @@
+using CorTasks.CoroutineExtension;
+using CorTasks.CoroutineExtension.Presets;
+using DG.Tweening;
 using Grid.Controller;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +90,8 @@ namespace Grid.Factory
 
         public static void DespawnGridItem(GridItemController item)
         {
+            item.CompleteTweems();
+
             Object.Destroy(item.gameObject);
         }
 

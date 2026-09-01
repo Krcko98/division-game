@@ -41,5 +41,10 @@ namespace Grid.Controller
         {
             itemView.Rescale(data, () => finishedRescaleCallback?.Invoke(this));
         }
+
+        public void CompleteTweems()
+        {
+            itemView.CompleteTweens();
+        }
     }
 }
