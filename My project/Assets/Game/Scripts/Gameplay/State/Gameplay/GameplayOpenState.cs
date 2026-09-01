@@ -76,7 +76,9 @@ namespace Grid.Gameplay.States
 
             draggingSlot = slot;
 
-            if(!fsm.data.TryAdd(draggingSlotKey, draggingSlot))
+            if (draggingSlot.AttachedItem == null) return;
+
+            if (!fsm.data.TryAdd(draggingSlotKey, draggingSlot))
             {
                 fsm.data[draggingSlotKey] = draggingSlot;
             }
@@ -113,6 +115,8 @@ namespace Grid.Gameplay.States
             {
                 fsm.data[spawnedItemKey] = spawnedItem;
             }
+
+            draggingSlot = null;
 
             fsm.ChangeState(GameplayFSM.dragState);
         }

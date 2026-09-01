@@ -96,8 +96,6 @@ namespace Grid.View
 
         public void DetachItem(GridSlotController slot, RescaleData data, Action<GridSlotController> detachCallback = null)
         {
-            GridFactory.DespawnGridItem(slot.AttachedItem);
-
             slot.DetachItem(
                 data: data,
                 callback: detachCallback

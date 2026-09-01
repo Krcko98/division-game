@@ -3,7 +3,6 @@ using Grid.Controller;
 using Grid.Gameplay.Data;
 using Grid.Gameplay.States;
 using SM;
-using UnityEngine;
 
 namespace Grid.Gameplay
 {
@@ -18,11 +17,15 @@ namespace Grid.Gameplay
 
         public GridController gridController;
         public GridInventoryController inventoryController;
+        public ScoreController scoreController;
+        public GameOverController gameOverController;
 
         public GameplayFSM(GameplayFSMData data)
         {
             gridController = data.gridController;
             inventoryController = data.inventoryController;
+            scoreController = data.scoreController;
+            gameOverController = data.gameOverController;
         }
 
         public override void Init(string defaultState = "")
@@ -30,6 +33,7 @@ namespace Grid.Gameplay
             states[inventoryFillState] = new GameplayFillInventoryState();
             states[openState] = new GameplayOpenState();
             states[dragState] = new GameplayDragState();
+            states[gridFillState] = new GameplayFillGridState();
 
             base.Init(defaultState);
 

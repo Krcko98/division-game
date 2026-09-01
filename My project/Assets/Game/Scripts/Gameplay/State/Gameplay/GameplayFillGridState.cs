@@ -1,30 +1,22 @@
 ﻿using Grid.Controller;
-using Grid.Controller.Slot;
 using Grid.Data;
 using Grid.Data.Item;
 using Grid.Factory;
 using Grid.Gameplay.Rules.Data;
-using Grid.Static;
 using Grid.Static.Helper;
 using SM;
-using UnityEditor;
+using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Grid.Gameplay.States
 {
-    public class GameplayDragState : State
+    public class GameplayFillGridState : State
     {
         protected GameplayFSM fsm;
 
-        private GridSlotController draggingSlot;
-        private GridItemController spawnedItem;
+        private GridSlotController dropSlot;
+        private int dropSlotNumber;
 
-        private GridSlotController slotHover;
-        private GridSlotController previousSlotHover;
-
-        private string spawnedItemKey = "spawnedItem";
-        private string draggingSlotKey = "draggingSlot";
         private string dropSlotKey = "dropSlot";
         private string dropSlotNumberKey = "dropSlotNumber";
 
@@ -65,9 +57,20 @@ namespace Grid.Gameplay.States
         public override void Enter()
         {
             base.Enter();
-            
-            GlobalEventBus.OnSlotInventoryDragEnd += OnDragEnd;
-            GlobalEventBus.OnSlotInventoryDrag += OnDrag;
+
+            dropSlot = fsm.data[dropSlotKey] as GridSlotController;
+            dropSlotNumber = (int)fsm.data[dropSlotNumberKey];
+
+            GameController.Instance.GameRules.InsertItem(
+                item: new PosValue(
+                    pos: new Vector2Int((int)dropSlot.Pos.x, (int)dropSlot.Pos.y),
+                    value: dropSlotNumber
+                ),
+                gridResolved: (GameRuleCalcResult result) =>
+                {
+                    UpdateGrid(result);
+                }
+            );
         }
 
         public override void Update()
@@ -78,59 +81,59 @@ namespace Grid.Gameplay.States
         public override void Exit()
         {
             base.Exit();
-
-            draggingSlot = null;
-            spawnedItem = null;
-
-            removeListeners();
-        }
-
-        private void removeListeners()
-        {
-            GlobalEventBus.OnSlotInventoryDragEnd -= OnDragEnd;
-            GlobalEventBus.OnSlotInventoryDrag -= OnDrag;
         }
 
         #region Event
-        private void OnDrag(GridSlotController slot, PointerEventData eventData)
+        private void UpdateGrid(GameRuleCalcResult result)
         {
-            draggingSlot = fsm.data[draggingSlotKey] as GridSlotController;
-            spawnedItem = fsm.data[spawnedItemKey] as GridItemController;
+            fsm.scoreController.AddScore(result.score);
+            GridSlotController slot;
 
-            if(draggingSlot != slot) return;
+            //Fill all slots with items that correspond to their new values and detach and remove all items that no longer exist
+            foreach(PosValue pos in result.updatedItems)
+            {
+                slot = fsm.gridController.Slots[pos.pos];
 
-            slotHoverSelection(eventData.pointerCurrentRaycast);
-
-            spawnedItem.SetAbsolutePosition(CanvasHelper.ClickPointToCanvasPoint(GameController.Instance.MainCanvas, eventData));
-        }
-
-        private void OnDragEnd(GridSlotController slot, PointerEventData eventData)
-        {
-            spawnedItem = fsm.data[spawnedItemKey] as GridItemController;
-
-            slotHover = getGridSlotFromRaycast(eventData.pointerCurrentRaycast);
-
-            deselectSlots();
-
-            draggingSlot.AttachedItem.Rescale(
-                draggedSlotRescaleData
-            );
-
-            spawnedItem.Rescale(
-                draggedItemRescaleData,
-                (GridItemController item) =>
+                if(pos.value == 0)
                 {
-                    GridFactory.DespawnGridItem(item);
-
-                    spawnedItem = null;
-                    draggingSlot = null;
-
-                    fsm.ChangeState(GameplayFSM.openState);
+                    if(slot.AttachedItem != null)
+                    {
+                        slot.DetachItem(slotDetachRescaleData);
+                    }
                 }
-            );
+                else
+                {
+                    if (slot.AttachedItem != null)
+                    {
+                        slot.DetachItem(slotDetachRescaleData, (GridSlotController slot) =>
+                        {
+                            GridItemController item = GridFactory.CreateGridItem(0);
+                            item.Init(new GridItemControllerData(
+                                parent: null,
+                                itemData: new GridItemData(
+                                    number: pos.value,
+                                    color: GridItemHelper.FetchColor(pos.value),
+                                    itemData: GameController.Instance.GameplayData.DragAttachItemData
+                                )
+                            ));
+
+                            slot.AttachItem(item);
+                            slot.AttachedItem.Rescale(
+                                slotAttachRescaleData
+                            );
+                        });
+                    }
+                }
+            }
+
+            if(result.boardFull)
+            {
+                fsm.gameOverController.SetScore(fsm.scoreController.Score);
+                fsm.gameOverController.Show();
+            }
 
             //Our pointer is over slot that is selected
-            if (slotHover != null)
+            /*if(slotHover != null)
             {
                 //If item is not already on the selected slot we will create a new item
                 //Otherwise, we just continue
@@ -152,6 +155,21 @@ namespace Grid.Gameplay.States
                     slotHover.AttachedItem.Rescale(
                         slotAttachRescaleData
                     );
+
+                    //Start grid gameplay rule calc and gather data for resolving visual elements
+                    if (!(slotHover as GridSlotKeepController))
+                    {
+                        GameController.Instance.GameRules.InsertItem(
+                            item: new PosValue(
+                                pos: new Vector2Int((int)slotHover.Pos.x, (int)slotHover.Pos.y),
+                                value: num
+                            ),
+                            gridResolved: (GameRuleCalcResult result) =>
+                            {
+                                 
+                            }
+                        );
+                    }
 
                     //If we are dragging a keep tile do not push anything just remove it from keep
                     if (!(draggingSlot as GridSlotKeepController))
@@ -182,68 +200,30 @@ namespace Grid.Gameplay.States
                             slotDetachRescaleData
                         );
                     }
-
-                    //Start grid gameplay rule calc and gather data for resolving visual elements
-                    if (!(slotHover as GridSlotKeepController))
-                    {
-                        /*GameController.Instance.GameRules.InsertItem(
-                            item: new PosValue(
-                                pos: new Vector2Int((int)slotHover.Pos.x, (int)slotHover.Pos.y),
-                                value: num
-                            ),
-                            gridResolved: (GameRuleCalcResult result) =>
-                            {
-                                 
-                            }
-                        );*/
-
-                        if (!fsm.data.TryAdd(dropSlotKey, slotHover))
-                        {
-                            fsm.data[dropSlotKey] = slotHover;
-                        }
-
-                        if (!fsm.data.TryAdd(dropSlotNumberKey, num))
-                        {
-                            fsm.data[dropSlotNumberKey] = num;
-                        }
-
-                        fsm.ChangeState(GameplayFSM.gridFillState);
-                    }
                 }
             }
 
-            
+            draggingSlot.AttachedItem.Rescale(
+                draggedSlotRescaleData
+            );
+
+            spawnedItem.Rescale(
+                draggedItemRescaleData,
+                (GridItemController item) => 
+                {
+                    GridFactory.DespawnGridItem(item);
+
+                    spawnedItem = null;
+                    draggingSlot = null;
+
+                    fsm.ChangeState(GameplayFSM.openState);
+                }
+            );*/
         }
         #endregion
 
         #region Calc
-        private GridSlotController getGridSlotFromRaycast(RaycastResult result)
-        {
-            return result.gameObject?.GetComponent<GridSlotReceiver>()?.GridSlot;
-        }
-
-        private void slotHoverSelection(RaycastResult result)
-        {
-            slotHover = getGridSlotFromRaycast(result);
-
-            if(slotHover != null)
-            {
-                slotHover.Select(true);
-
-                if(previousSlotHover != slotHover && previousSlotHover != null) previousSlotHover.Select(false);
-            }
-            else
-            {
-                if(previousSlotHover != slotHover && previousSlotHover != null) previousSlotHover.Select(false);
-            }
-            previousSlotHover = slotHover;
-        }
-
-        private void deselectSlots()
-        {
-            slotHover?.Select(false);
-            previousSlotHover?.Select(false);
-        }
+        
         #endregion
     }
 }

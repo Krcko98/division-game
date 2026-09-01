@@ -1,15 +1,14 @@
-﻿using Grid.Controller;
+﻿using CorTasks.CoroutineExtension;
+using Grid.Controller;
 using Grid.Data;
-using Grid.Factory;
-using SM;
 using Grid.Data.Item;
-using UnityEngine;
+using Grid.Factory;
 using Grid.Static.Helper;
-using CorTasks;
-using CorTasks.CoroutineExtension;
-using CorTasks.CoroutineExtension.Presets;
-using System.Collections;
+using SM;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Grid.Gameplay.States
 {
@@ -34,7 +33,7 @@ namespace Grid.Gameplay.States
                 pushItems(
                     delay: GameController.Instance.GameplayData.InventoryLoadPushDelay, 
                     amount: 3,
-                    () => {
+                    callback: () => {
                         fsm.inventoryController.SetInteractivity(true);
 
                         fsm.ChangeState(GameplayFSM.openState);
@@ -74,14 +73,19 @@ namespace Grid.Gameplay.States
         private IEnumerator pushItems(float delay, int amount, Action callback)
         {
             int i=amount;
+            bool pushFinished = false;
+            Action waitForPush = () => pushFinished = true;
 
-            while(i>0)
+            while (i > 0)
             {
+                pushItem(waitForPush);
+
+                callback += waitForPush.Invoke;
+                yield return new WaitUntil(() => pushFinished);
                 yield return new WaitForSeconds(delay);
 
-                pushItem();
-
-                yield return new WaitUntil(callback);
+                callback -= waitForPush.Invoke;
+                pushFinished = false;
 
                 i--;
             }

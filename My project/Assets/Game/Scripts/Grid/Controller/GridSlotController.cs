@@ -6,7 +6,6 @@ using Grid.Static;
 using Grid.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Grid.Data.GridSlotControllerData;
 
 namespace Grid.Controller
 {
@@ -23,6 +22,7 @@ namespace Grid.Controller
         private event EventDelegates.OnSlotDragEndDelegate onSlotDragEnd;
         private event EventDelegates.OnSlotDragDelegate onSlotDrag;
 
+        public bool CanDrag { get => canDrag; protected set => canDrag = value; }
         public Vector2 Pos { get => pos; }
         public GridItemController AttachedItem { get => attachedItem; }
 
@@ -63,6 +63,7 @@ namespace Grid.Controller
                 data,
                 (GridItemController item) => 
                 {
+                    attachedItem = null;
                     GridFactory.DespawnGridItem(item);     
 
                     callback?.Invoke(this);

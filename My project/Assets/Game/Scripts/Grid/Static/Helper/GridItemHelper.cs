@@ -7,6 +7,7 @@ namespace Grid.Static.Helper
     {
         public static readonly Dictionary<int, string> colorNumberPairs = new Dictionary<int, string>()
         {
+            { 1, "#000000" },
             { 2, "#00DDB1" },
             { 3, "#00D9AE" },
             { 4, "#00D5AA" },

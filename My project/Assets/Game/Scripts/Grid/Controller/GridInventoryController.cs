@@ -4,7 +4,6 @@ using Grid.View;
 using System.Collections.Generic;
 using UnityEngine;
 using static Grid.Data.GridSlotControllerData;
-using System.Linq;
 using UnityEngine.EventSystems;
 using Grid.Data.Item;
 using Grid.Factory;
@@ -76,7 +75,7 @@ namespace Grid.Controller
                     if(i == 0)
                     {
                         gridInventoryView.AttachItem(activeSlot, item);
-                        pushedCallback();
+                        pushedCallback?.Invoke();
                     }
                     else continue;
                 }
@@ -98,22 +97,26 @@ namespace Grid.Controller
             freeSlots--;
         }
 
+        public void PopItemInSlotFromQueue(RescaleData data, Action<GridSlotController> popCallback = null)
+        {
+            gridInventoryView.DetachItem(
+                slot: slots[new Vector2(0, inventorySlots-freeSlots-1)],
+                data: data,
+                detachCallback: popCallback
+            );
+            freeSlots++;
+        }
+
+        public void SetInteractivity(bool interactive)
+        {
+            gridInventoryView.SetInteractivity(interactive);
+        }
+        #endregion
+
+        #region Calc
         private void moveSlotItems(GridSlotController currentSlot, GridSlotController nextSlot, GridItemController currentSlotItem, Action movedSlots = null)
         {
             GridItemData itemData = currentSlot.AttachedItem.ItemData;
-
-            //Take the data from currentSlotItem and create a new item and put it in the next slot
-            GridItemController nextSlotNewItem = GridFactory.CreateGridItem(0);
-            nextSlotNewItem.Init(new GridItemControllerData(
-                parent: null,
-                itemData: new GridItemData(
-                    number: itemData.number,
-                    color: GridItemHelper.FetchColor(itemData.number),
-                    itemData: GameController.Instance.GameplayData.InventoryItemData
-                )
-            ));
-
-            gridInventoryView.AttachItem(nextSlot, nextSlotNewItem);
 
             //Remove the current slots item
             gridInventoryView.DetachItem(
@@ -126,27 +129,24 @@ namespace Grid.Controller
                 ),
                 (GridSlotController slot) =>
                 {
+                    //Take the data from currentSlotItem and create a new item with the copied data and put it in the next slot
+                    GridItemController nextSlotNewItem = GridFactory.CreateGridItem(0);
+                    nextSlotNewItem.Init(new GridItemControllerData(
+                        parent: null,
+                        itemData: new GridItemData(
+                            number: itemData.number,
+                            color: GridItemHelper.FetchColor(itemData.number),
+                            itemData: GameController.Instance.GameplayData.InventoryItemData
+                        )
+                    ));
+
+                    gridInventoryView.AttachItem(nextSlot, nextSlotNewItem);
                     gridInventoryView.AttachItem(currentSlot, currentSlotItem);
+
                     movedSlots?.Invoke();
                 }
             );
-
         }
-
-        public void PopItemInSlotFromQueue(RescaleData data)
-        {
-            gridInventoryView.DetachItem(slots[new Vector2(0, freeSlots - 1)], data);
-            freeSlots--;
-        }
-
-        public void SetInteractivity(bool interactive)
-        {
-            gridInventoryView.SetInteractivity(interactive);
-        }
-        #endregion
-
-        #region Calc
-
         #endregion
 
         #region SlotDrag

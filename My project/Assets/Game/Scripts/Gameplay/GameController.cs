@@ -12,7 +12,11 @@ namespace Grid.Gameplay
     {
         [SerializeField] private GridController gridController;
         [SerializeField] private GridInventoryController gridInventoryController;
+        [SerializeField] private ScoreController scoreController;
+        [SerializeField] private GameOverController gameOverController;
+
         [SerializeField] private Canvas mainCanvas;
+        
         [SerializeField] private GameplayDataSO gameplayData;
         [SerializeField] private GameRulesController gameRules = new GameRulesController();
 
@@ -47,6 +51,10 @@ namespace Grid.Gameplay
             gridInventoryController.Init(new GridInventoryControllerData(
                 inventorySize: 3    
             ));
+            scoreController.Init(new ScoreControllerData(
+                startScore: 0
+            ));
+            gameOverController.Init(new GameOverControllerData());
             
             gameFSM = new GameStateFSM(
                 new GameStateFSMData(
@@ -58,7 +66,9 @@ namespace Grid.Gameplay
             gameplayFSM = new GameplayFSM(
                 new GameplayFSMData(
                     gridController: gridController,
-                    inventoryController: gridInventoryController
+                    inventoryController: gridInventoryController,
+                    scoreController: scoreController,
+                    gameOverController: gameOverController
                 )
             );
             gameplayFSM.Init();

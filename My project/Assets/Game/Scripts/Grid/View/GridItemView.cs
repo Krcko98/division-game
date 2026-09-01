@@ -58,8 +58,6 @@ namespace Grid.View
 
         public void Rescale(RescaleData data, Action finishedRescaleCallback = null)
         {
-            //rect.transform.DOComplete();
-
             rect.transform.localScale = data.rescaleFromSize;
 
             new Task(TaskPresets.DelayForSeconds(

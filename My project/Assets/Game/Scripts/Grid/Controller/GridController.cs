@@ -14,10 +14,15 @@ namespace Grid.Controller
 
         //Used as a template for creating slots in runtime
         [SerializeField] private GridSlotController slotPref;
-        [SerializeField] private List<GridSlotController> slots = new List<GridSlotController>();
+        [SerializeField] private Dictionary<Vector2, GridSlotController> slots = new Dictionary<Vector2, GridSlotController>();
+
+        public Dictionary<Vector2, GridSlotController> Slots { get => slots; }
 
         public void Init(GridControllerData data)
         {
+            List<GridSlotController> slotList = new List<GridSlotController>();
+            slots.Clear();
+
             gridView.Init(
                 new GridViewData(
                     slotPref: slotPref,
@@ -29,8 +34,13 @@ namespace Grid.Controller
                         activeSlotID: -1
                     )
                 ),
-                createdSlots: out slots 
+                createdSlots: out slotList 
             );
+
+            foreach (GridSlotController slot in slotList)
+            {
+                slots.Add(slot.Pos, slot);
+            }
         }
 
         private void slotDragBegin(GridSlotController slot, PointerEventData eventData)
